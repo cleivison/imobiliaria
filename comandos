@@ -1,0 +1,9 @@
+npx sequelize db:migrate
+npx sequelize-cli db:migrate
+npx sequelize migration:create --name=create-users
+npx sequelize model:create --name MyUser --attributes first_name:string,last_name:string,bio:text
+npx sequelize model:create --name Cliente --attributes nome:string,tel:string,tel2:string,cpf:string,cep:string,numero:integer
+
+npx sequelize-cli model:generate --name User --attributes 
+npx create-react-app my-app
+npm start

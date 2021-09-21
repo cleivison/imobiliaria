@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5cdb2b8f.chunk.css",
+    "main.js": "/static/js/main.767d3aef.chunk.js",
+    "main.js.map": "/static/js/main.767d3aef.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.6f9bb562.js",
+    "runtime-main.js.map": "/static/js/runtime-main.6f9bb562.js.map",
+    "static/css/2.123c8252.chunk.css": "/static/css/2.123c8252.chunk.css",
+    "static/js/2.03663690.chunk.js": "/static/js/2.03663690.chunk.js",
+    "static/js/2.03663690.chunk.js.map": "/static/js/2.03663690.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.aa2262569cd8c7fa94532cca031d37ab.js": "/precache-manifest.aa2262569cd8c7fa94532cca031d37ab.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.123c8252.chunk.css.map": "/static/css/2.123c8252.chunk.css.map",
+    "static/css/main.5cdb2b8f.chunk.css.map": "/static/css/main.5cdb2b8f.chunk.css.map",
+    "static/js/2.03663690.chunk.js.LICENSE.txt": "/static/js/2.03663690.chunk.js.LICENSE.txt",
+    "static/media/banheiro.png": "/static/media/banheiro.43baf16d.png",
+    "static/media/banner02.png": "/static/media/banner02.14f0882d.png",
+    "static/media/banner03.png": "/static/media/banner03.9c528c23.png",
+    "static/media/banner04.jpg": "/static/media/banner04.21b81e38.jpg",
+    "static/media/logo2.png": "/static/media/logo2.512e3a7d.png",
+    "static/media/preco.png": "/static/media/preco.3b9e41c5.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6f9bb562.js",
+    "static/css/2.123c8252.chunk.css",
+    "static/js/2.03663690.chunk.js",
+    "static/css/main.5cdb2b8f.chunk.css",
+    "static/js/main.767d3aef.chunk.js"
+  ]
+}
