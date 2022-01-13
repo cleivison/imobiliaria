@@ -42,10 +42,10 @@ module.exports = {
     },  
 
     async get(req, res) {
-        const offset = (req.query.page - 1) * req.query.pageSize;
-        const limit = req.query.pageSize;
+        const offset = parseInt((req.query.page - 1) * req.query.pageSize);
+        const limit = parseInt( req.query.pageSize);
         const pesquisa = req.query.search || '';
-        
+        console.log('LIMITE ----__+++_+++>>>,', limit, offset)
         let codigoWhere = {};
 
         if(pesquisa){
@@ -91,9 +91,10 @@ module.exports = {
         const Imovel = result.rows;
 
         let imovelcustom = await filesFromMultipleData(Imovel);
-        
+        console.log('passou -====<>>>')
         res.status(200).send({imoveis: imovelcustom, count: result.count});
        }).catch( err => {
+           console.log('error -====<>>>', err)
             res.status(403).send({
                 message: err.message || "Some error occurred while retrieving Imovel."
             });
@@ -101,8 +102,8 @@ module.exports = {
      },
 
     async pers(req, res) {
-        const offset = (req.query.page - 1) * req.query.pageSize;
-        const limit = req.query.pageSize;
+        const offset = parseInt((req.query.page - 1) * req.query.pageSize);
+        const limit = parseInt( req.query.pageSize);
         const {pesquisa, qtd_quartos, qtd_garagem, qtd_banheiros, finalidade, tipo} = req.query;
 
         let imovelparans = {
@@ -143,7 +144,6 @@ module.exports = {
         await Imovel.findAndCountAll({
             include:[{
                     model: Proprietario,
-                    
                 },
                 {
                     model: Endereco,
@@ -167,11 +167,13 @@ module.exports = {
                 ['codigo', 'ASC'],
             ],
         })
-       .then(async (result) => {               
+       .then(async (result) => {      
+            console.log('foi -====<>>>', err)         
             const Imovel = result.rows;                                  
             let imovelcustom = await filesFromMultipleData(Imovel);           
             res.status(200).send({imoveis: imovelcustom, count: result.count});
         }).catch( err => {
+             console.log('error -====<>>>', err)
             res.status(403).send({
                 message: err.message || "Some error occurred while retrieving Imovel."
             });
