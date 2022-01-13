@@ -32,8 +32,8 @@ module.exports = {
     },
 
     async pers(req, res) {
-        const offset = (req.query.page - 1) * req.query.pageSize;
-        const limit = req.query.pageSize;
+        const offset = parseInt((req.query.page - 1) * req.query.pageSize);
+        const limit = parseInt(req.query.pageSize);
         const pesquisa = req.query.search || '';
 
         await Tipoimovel.findAndCountAll({
