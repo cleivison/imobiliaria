@@ -167,8 +167,7 @@ module.exports = {
                 ['codigo', 'ASC'],
             ],
         })
-       .then(async (result) => {      
-            console.log('foi -====<>>>', err)         
+       .then(async (result) => {                         
             const Imovel = result.rows;                                  
             let imovelcustom = await filesFromMultipleData(Imovel);           
             res.status(200).send({imoveis: imovelcustom, count: result.count});
