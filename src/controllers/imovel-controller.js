@@ -1,5 +1,6 @@
 const filesFromSingleData = require('../services/filesManager').filesFromSingleData;
 const filesFromMultipleData = require('../services/filesManager').filesFromMultipleData;
+const filesFromMultipleDataS3 = require('../services/filesManager').filesFromMultipleDataS3;
 const deleteFilesAndFolder = require('../services/filesManager').deleteFilesAndFolder;
 const Imovel = require('../models').Imovel;
 const Endereco = require('../models').Endereco;
@@ -169,7 +170,7 @@ module.exports = {
         })
        .then(async (result) => {                         
             const Imovel = result.rows;                                  
-            let imovelcustom = await filesFromMultipleData(Imovel);           
+            let imovelcustom = await filesFromMultipleDataS3(Imovel);           
             res.status(200).send({imoveis: imovelcustom, count: result.count});
         }).catch( err => {
              console.log('error -====<>>>', err)

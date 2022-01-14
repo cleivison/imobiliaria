@@ -1,4 +1,5 @@
 const fs = require('fs');
+const getImagensS3 = require('./getImagensS3');
 const baseFolder = 'public/uploads/';
 
 function getFiles(item, resolve) {         
@@ -20,6 +21,14 @@ async function filesFromSingleData(item) {
 
 async function filesFromMultipleData(itens) {
     return Promise.all(itens.map(item => filesFromSingleData(item)));
+}
+
+async function filesFromMultipleDataS3(itens) {
+    let getImage = new getImagensS3();
+    return Promise.all(itens.map(item => new Promise(function(resolve, reject) {
+            getImage.getImagens(item, resolve)                 
+        })
+    ))
 }
 
 function deleteFiles(pathName, removidos = null, delFolder = false) {
@@ -58,5 +67,6 @@ module.exports = {
     filesFromSingleData,
     filesFromMultipleData,
     deleteFilesAndFolder,
-    deleteFiles
+    deleteFiles,
+    filesFromMultipleDataS3
 }
