@@ -1,6 +1,7 @@
 const filesFromSingleData = require('../services/filesManager').filesFromSingleData;
 const filesFromMultipleData = require('../services/filesManager').filesFromMultipleData;
 const filesFromMultipleDataS3 = require('../services/filesManager').filesFromMultipleDataS3;
+const filesFromMultipleDataS3v2 = require('../services/filesManager').filesFromMultipleDataS3v2;
 const deleteFilesAndFolder = require('../services/filesManager').deleteFilesAndFolder;
 const Imovel = require('../models').Imovel;
 const Endereco = require('../models').Endereco;
@@ -18,28 +19,34 @@ module.exports = {
         .then( Imovel => {                
             res.status(200).send(Imovel);
         }).catch( err => {
-            res.status(403).send({
+            res.status(400).send({
                 message: err.message || "Some error occurred while creating Imovel"
             });
         });        
     },   
     
     async post2(req, res) {
-        console.log('POST BODY: ',req);
-        await Imovel.create(req.body, {
-            include:[
-                {
-                    model: Endereco
-                }
-            ]
-        })
-        .then( Imovel => {                
-            res.status(200).send(Imovel);
-        }).catch( err => {
-            res.status(403).send({
-                message: err.message || "Some error occurred while creating Imovel"
+        //console.log('POST BODY: ',req);
+        try {
+            const imovel = await Imovel.create(req.body, {
+                include:[
+                    {
+                        model: Endereco
+                    }
+                ]
+            })
+            res.status(200).json({
+                imovel: imovel, 
+                error: false
             });
-        });        
+        } catch(err) {
+            console.log(err)
+            res.status(200).json({
+                message: err,
+                error: true,
+                mensagem: "Verifique se todos os campos foram preenchidos corretamente"
+            });
+        };        
     },  
 
     async get(req, res) {
@@ -90,12 +97,13 @@ module.exports = {
        .then(async (result) => {            
 
         const Imovel = result.rows;
+        
+        //let imovelcustom = await filesFromMultipleData(Imovel);
+     
+        //let imovelcustom = await filesFromMultipleDataS3(Imovel);                        
 
-        let imovelcustom = await filesFromMultipleData(Imovel);
-        console.log('passou -====<>>>')
-        res.status(200).send({imoveis: imovelcustom, count: result.count});
+        res.status(200).send({imoveis: Imovel, count: result.count});
        }).catch( err => {
-           console.log('error -====<>>>', err)
             res.status(403).send({
                 message: err.message || "Some error occurred while retrieving Imovel."
             });
@@ -169,8 +177,10 @@ module.exports = {
             ],
         })
        .then(async (result) => {                         
-            const Imovel = result.rows;                                  
-            let imovelcustom = await filesFromMultipleDataS3(Imovel);           
+            const Imovel = result.rows;  
+           // console.log('CHAMOU =>>>')                                 
+            let imovelcustom = await filesFromMultipleDataS3v2(Imovel);   
+           // console.log('ACABOU =>>>')        
             res.status(200).send({imoveis: imovelcustom, count: result.count});
         }).catch( err => {
              console.log('error -====<>>>', err)
@@ -217,7 +227,8 @@ module.exports = {
        .then( async Imovel => {      
             
             const imoveis = Imovel.map((item) => { return (item.dataValues)} )               
-            const imovelcustom = await filesFromMultipleData(imoveis);                         
+            //const imovelcustom = await filesFromMultipleData(imoveis);                         
+            const imovelcustom = await filesFromMultipleDataS3v2(imoveis);
             res.status(200).send({imoveis: imovelcustom});
         }).catch( err => {
             res.status(500).send({
@@ -251,9 +262,11 @@ module.exports = {
                 });
             }
 
-            let imovelcustom = await filesFromSingleData(Imovel);
-        
-            res.status(200).send(imovelcustom);                        
+            //let imovelcustom = await filesFromSingleData(Imovel);           
+            let imovelcustom = []
+            imovelcustom.push(Imovel)           
+            imovelcustom = await filesFromMultipleDataS3v2(imovelcustom);                                   
+            res.status(200).send(imovelcustom[0]);                        
        }).catch( err => {
 
             if(err.kind === 'ObjectId'){

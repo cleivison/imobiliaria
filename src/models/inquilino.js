@@ -13,35 +13,40 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true
+        notEmpty: true,
+        msg: 'O campo nome é obrigatório.'
       }
     },
     rg: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: false
+        notEmpty: false,
+        msg: 'O campo rg é obrigatório.'
       }
     },
     cpf: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true
+        notEmpty: true,
+        msg: 'O campo cpf é obrigatório.'
       }
     },
     dataNascimento: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        notEmpty: true
+        notEmpty: true,
+        msg: 'O campo data nascimento é obrigatório.'
       }
     },
     endereco_id: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
-        notEmpty: true
+        notEmpty: true,
+        msg: 'O campo endereco é obrigatório.'
       }
     },
   }, {

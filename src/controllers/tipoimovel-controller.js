@@ -6,14 +6,27 @@ module.exports = {
 
     async post(req, res) {
         
-        await Tipoimovel.create(req.body)
-        .then( Tipoimovel => {                
-            res.status(200).send(Tipoimovel);
-        }).catch( err => {
-            res.status(403).send({
-                message: err.message || "Some error occurred while creating Tipoimovel"
+        // await Tipoimovel.create(req.body)
+        // .then( Tipoimovel => {                
+        //     res.status(200).send(Tipoimovel);
+        // }).catch( err => {
+        //     res.status(403).send({
+        //         message: err.message || "Some error occurred while creating Tipoimovel"
+        //     });
+        // });   
+        try { 
+            const tipoimovel = await Tipoimovel.create(req.body);
+            res.status(200).json({
+                tipoimovel: tipoimovel,
+                error: false
             });
-        });        
+        } catch(err) {
+            res.status(200).json({
+                message: err,
+                mensagem: "erro ao cadastrar, verifique se o campo esta preenchido corretamente",
+                error: true
+            });
+        } 
     },
     
     async get(req, res) {

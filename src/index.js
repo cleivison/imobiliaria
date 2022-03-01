@@ -2,9 +2,14 @@ require('dotenv/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 const port = process.env.PORT || 3333;
+// enable files upload
+app.use(fileUpload({
+    createParentPath: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static('public'));

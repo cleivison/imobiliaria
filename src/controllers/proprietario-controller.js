@@ -6,21 +6,40 @@ const Op = Sequelize.Op;
 module.exports = {
 
     async post(req, res) {
-        
-        await Proprietario.create(req.body,{
-            include:[
-                {
-                    model: Endereco
-                }
-            ]
-        })
-        .then( Proprietario => {                
-            res.status(200).send(Proprietario);
-        }).catch( err => {
-            res.status(403).send({
-                message: err.message || "Some error occurred while creating Proprietario"
+        try {
+            const proprietario = await Proprietario.create(req.body,{
+                include:[
+                    {
+                        model: Endereco
+                    }
+                ]
+            })
+            res.status(200).json({
+                proprietario: proprietario,
+                error: false
             });
-        });        
+        } catch (err) {
+            res.status(200).json({
+                message: err,
+                mensagem: "Verifique se todos os campos foram preenchidos corretamente",
+                error: true
+            });
+        }  
+           
+        // await Proprietario.create(req.body,{
+        //     include:[
+        //         {
+        //             model: Endereco
+        //         }
+        //     ]
+        // })
+        // .then( Proprietario => {                
+        //     res.status(200).send(Proprietario);
+        // }).catch( err => {
+        //     res.status(403).send({
+        //         message: err.message || "Some error occurred while creating Proprietario"
+        //     });
+        // });        
     },    
 
     async get(req, res) {

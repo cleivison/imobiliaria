@@ -6,21 +6,40 @@ const Op = Sequelize.Op;
 module.exports = {
 
     async post(req, res) {
-        
-        await Inquilino.create(req.body,{
-            include:[
-                {
-                    model: Endereco
-                }
-            ]
-        })
-        .then( Inquilino => {                
-            res.status(200).send(Inquilino);
-        }).catch( err => {
-            res.status(403).send({
-                message: err.message || "Some error occurred while creating Inquilino"
+        try {
+            const inquilino = await Inquilino.create(req.body,{
+                include:[
+                    {
+                        model: Endereco
+                    }
+                ]
+            })
+                  
+            res.status(200).json({
+                inquilino: inquilino,
+                error: false
+            });    
+        } catch(err) {
+            res.status(200).json({
+                error: true,
+                message: err,
+                mensagem: "Verifique se todos os campos foram preenchidos corretamente"
             });
-        });          
+        }
+        // await Inquilino.create(req.body,{
+        //     include:[
+        //         {
+        //             model: Endereco
+        //         }
+        //     ]
+        // })
+        // .then( Inquilino => {                
+        //     res.status(200).send(Inquilino);
+        // }).catch( err => {
+        //     res.status(403).send({
+        //         message: err.message || "Some error occurred while creating Inquilino"
+        //     });
+        // });          
     },    
 
     async get(req, res) {

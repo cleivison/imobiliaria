@@ -17,6 +17,7 @@ const userController = require('./controllers/user-controller');
 const recibocontratoController = require('./controllers/recibocontrato-controller');
 
 const deleteFiles = require('./services/filesManager').deleteFiles;
+const { filesUploadS3, filesFromMultipleDataS3v2 } = require('./services/filesManager');
 
 /* upload de imagens */
 const storage = multer.diskStorage({
@@ -42,7 +43,12 @@ routes.get('/', (req, res) => {
     res.send("Pagina Inicial");
 });
 
-routes.get('/arquivosaws', (req, res) => {
+routes.post('/arquivosaws2', async (req, res) => {
+    console.log('comecou')
+    await filesFromMultipleDataS3v2();
+    console.log('acabou')
+})
+routes.post('/arquivosaws', (req, res) => {
 
     // Connection
     // This is how you can use the .aws credentials file to fetch the credentials
@@ -62,44 +68,62 @@ routes.get('/arquivosaws', (req, res) => {
     // Create an S3 client
     const s3 = new AWS.S3({ endpoint: ep });
 
-    // The following example retrieves an object for an S3 bucket.
-    // set the details for the bucket and key
-    // const object_get_params = {
-    //     Bucket: "wpimobiliaria",
-    //     Key: "3XD0I9ONMDMIZGEP3AT4"
-    // };
+    // The following example creates an object. If the bucket is versioning enabled, S3 returns version ID in response.
+    // set key and bucket.   
+    let imagens=[]
+    Object.keys(req.files).forEach(function(key) {     
+        imagens.push(req.files[key])
+    });
+    //console.log('TESTE ===>>>', imagens);
+    
+    const object_upload_params = {
+        Body: imagens[0].data,
+        Bucket: "wpimobiliaria",
+        Key: 'imoveis/imagens/teste/'+imagens[0].name,
+        ACL: 'public-read',   
+        ContentType: imagens[0].mimetype    
+    };
 
-    // // get the object that we just uploaded.
-    // // get the uploaded test_file
-    // s3.getObject(object_get_params, function (err, data) {
-    //     if (err) console.log(err, err.stack); // an error occurred
-    //     else console.log(data);           // successful response
-    // });
-    // AWS.config.update({accessKeyId: '3XD0I9ONMDMIZGEP3AT4', secretAccessKey: 'Z9YmnsoPzt1KJBVYRmy0iAKErLLH00F5hHZlW6pT', region: 'us-west-1.wasabisys.com'});
-    // const s3 = new AWS.S3();
+    // upload object to previously created "examplebucket"
+    s3.putObject(object_upload_params, function (err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else console.log(data); 
+        return res.status(201).send()          // successful response
+    });
 
-    const params = { 
-     Bucket: 'wpimobiliaria',
-     Delimiter: '',
-     Prefix: 'imoveis/imagens/85/'
-    }
+    // const params = { 
+    //  Bucket: 'wpimobiliaria',
+    //  Delimiter: '',
+    //  Prefix: 'imoveis/imagens/85/'
+    // }
 
-    s3.listObjects(params, function (err, data) {
-     if(err)throw err;
-     console.log(data);
-    });    
+    // s3.listObjects(params, function (err, data) {
+    //  if(err)throw err;
+    //  console.log(data);
+    // });    
 });
 
 /* Rota Upload */
-routes.post('/uploads', upload.array('file'), (req, res) => {
-
-    if (req.body.removidos) {
-        const baseFolder = 'public/uploads/';
-        let pathName = baseFolder + req.query.folder;
-        deleteFiles(pathName, req.body.removidos);
+//routes.post('/uploads', upload.array('file'), (req, res) => {
+routes.post('/uploads', async (req, res) => {
+    if(req.files) {
+        let imagens=[]
+        Object.keys(req.files).forEach(function(key) {     
+            imagens.push(req.files[key])
+        });
+        console.log('imagens para upload =>>', imagens);
+        const codigo = req.query.folder;
+        await filesUploadS3(imagens, codigo)
+        return res.status(201).send(console.log('imagens upload completa!'));
     }
+   
+    // if (req.body.removidos) {
+    //     const baseFolder = 'public/uploads/';
+    //     let pathName = baseFolder + req.query.folder;
+    //     deleteFiles(pathName, req.body.removidos);
+    // }
 
-    res.send(console.log(req.body));
+    res.send(console.log('no file =>>'));
 });
 /*INICIO Rotas PUBLICAS */
 
