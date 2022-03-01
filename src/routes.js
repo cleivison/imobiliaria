@@ -146,7 +146,7 @@ routes.get('/tipoimovel', tipoimovelController.get);
 
 /* Rotas Contratoimovel */
 routes.get('/contratoimovel', authMiddleware, contratoimovelController.get);
-routes.get('/contratoimovel/:id', authMiddleware, contratoimovelController.getById);
+routes.get('/contratoimovel/:id', contratoimovelController.getById);
 routes.post('/contratoimovel', authMiddleware, contratoimovelController.post);
 routes.put('/contratoimovel/:id', authMiddleware, contratoimovelController.put);
 routes.delete('/contratoimovel/:id', authMiddleware, contratoimovelController.delete);
