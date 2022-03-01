@@ -146,7 +146,7 @@ routes.get('/tipoimovel', tipoimovelController.get);
 
 /* Rotas Contratoimovel */
 routes.get('/contratoimovel', authMiddleware, contratoimovelController.get);
-routes.get('/contratoimovel/:id', contratoimovelController.getById);
+routes.get('/contratoimovel/:id', authMiddleware, contratoimovelController.getById);
 routes.post('/contratoimovel', authMiddleware, contratoimovelController.post);
 routes.put('/contratoimovel/:id', authMiddleware, contratoimovelController.put);
 routes.delete('/contratoimovel/:id', authMiddleware, contratoimovelController.delete);
@@ -170,7 +170,7 @@ routes.delete('/endereco/:id', authMiddleware, enderecoController.delete);
 routes.get('/imovel', authMiddleware, imovelController.get);
 routes.get('/imovel/pers', authMiddleware, imovelController.pers);
 routes.get('/imovel/pers2', authMiddleware, imovelController.pers2);
-routes.get('/imovel/:id', authMiddleware, imovelController.getById);
+routes.get('/imovel/:id', imovelController.getById);
 routes.post('/imovel', authMiddleware, imovelController.post2);
 routes.put('/imovel/:id', authMiddleware, imovelController.put);
 routes.delete('/imovel/:id', authMiddleware, imovelController.delete);
